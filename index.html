@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GP Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>GP Calculator</h1>
+        <div class="input-section">
+            <input type="text" id="courseName" placeholder="Course" required>
+            <input type="number" id="creditUnit" placeholder="Unit Load" required>
+            <select id="grade" required>
+                <option value="">Grade</option>
+                <option value="5">A</option>
+                <option value="4">B</option>
+                <option value="3">C</option>
+                <option value="2">D</option>
+                <option value="1">E</option>
+                <option value="0">F</option>
+            </select>
+            <button onclick="addCourse()">Add</button>
+        </div>
+        <div id="coursesList"></div>
+        <button id="calculateBtn" onclick="calculateGP()">Calculate GP</button>
+        <div id="result"></div>
+    </div>
+    <script>let courses = [];
+
+function addCourse() {
+    const courseName = document.getElementById('courseName').value;
+    const creditUnit = parseFloat(document.getElementById('creditUnit').value);
+    const grade = parseFloat(document.getElementById('grade').value);
+
+    if (courseName && creditUnit && grade >= 0) {
+        courses.push({ courseName, creditUnit, grade });
+        updateCoursesList();
+        clearInputs();
+    } else {
+        alert('Please fill out all fields.');
+    }
+}
+
+function updateCoursesList() {
+    const coursesList = document.getElementById('coursesList');
+    coursesList.innerHTML = '';
+    courses.forEach((course, index) => {
+        coursesList.innerHTML += `<p>${index + 1}. ${course.courseName} - ${course.creditUnit} units - Grade: ${course.grade}</p>`;
+    });
+}
+
+function clearInputs() {
+    document.getElementById('courseName').value = '';
+    document.getElementById('creditUnit').value = '';
+    document.getElementById('grade').value = '';
+}
+
+function calculateGP() {
+    let totalUnits = 0;
+    let totalPoints = 0;
+
+    courses.forEach(course => {
+        totalUnits += course.creditUnit;
+        totalPoints += course.creditUnit * course.grade;
+    });
+
+    const gpa = totalPoints / totalUnits;
+    const result = document.getElementById('result');
+    result.innerHTML = `Your GPA is: ${gpa.toFixed(2)}`;
+} </script>
+</body>
+</html>
